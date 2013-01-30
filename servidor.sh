@@ -9,6 +9,10 @@ content_type=""
 
 while [ "$line" != "" ]
 do
+	if ( echo $line | grep -iq "content-length" )
+	then
+		content_length=$(echo $line | cut -d " " -f 2 )
+	fi
 	read line
 	line=$(echo $line | tr -d "\r" )
 done
@@ -18,6 +22,10 @@ file=".$(echo $request | awk '{ print $2 }' | sed -e 's/\.\.//g')"
 proto=$(echo $request | awk '{ print $3 }' )
 param=$(echo $file | sed -e 's/^[^?]*?//' )
 file=$(echo $file | sed -e 's/?.*$//' )
+
+if [ $content_length -gt 0 ] ; then
+	param=$(dd bs=$content_length count=1 2>/dev/null )
+fi
 
 header() {
 	status="$1"
@@ -44,7 +52,7 @@ if [ "$file" = "./" ] ; then
 fi
 
 echo -n "[$(date)] " >/dev/stderr
-echo -n "$method $file $param " >/dev/stderr
+echo -n "$method $file " >/dev/stderr
 
 if [ -f "$file" -a $( echo $file | grep ".py" ) ] ; then
 	echo "200 OK" >/dev/stderr
