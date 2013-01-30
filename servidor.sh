@@ -2,12 +2,20 @@
 
 SERVER="Mohicano"
 
-read -r request
+read -r line
+request=$(echo $line | tr -d "\r" )
+content_length=0
+content_type=""
+
+while [ "$line" != "" ]
+do
+	read line
+	line=$(echo $line | tr -d "\r" )
+done
 
 method=$(echo $request | awk '{ print $1 }' )
-request=$(echo $request | awk '{ print $2 }' | sed -e 's/\.\.//g')
+file=".$(echo $request | awk '{ print $2 }' | sed -e 's/\.\.//g')"
 proto=$(echo $request | awk '{ print $3 }' )
-file=".$request"
 param=$(echo $file | sed -e 's/^[^?]*?//' )
 file=$(echo $file | sed -e 's/?.*$//' )
 
