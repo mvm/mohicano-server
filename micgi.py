@@ -33,7 +33,7 @@ for file in os.listdir(par["dir"][0]):
 
 print "</ul></p>"
 
-print "<code>GET parameters = %s</code>" % par
+print "<code>%s parameters = %s</code>" % (os.environ['REQUEST_METHOD'], par)
 print """
 </body>
 </html>
