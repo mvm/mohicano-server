@@ -4,6 +4,7 @@ SERVER="Mohicano"
 
 read -r request
 
+method=$(echo $request | awk '{ print $1 }' )
 request=$(echo $request | awk '{ print $2 }' | sed -e 's/\.\.//g')
 file=".$request"
 param=$(echo $file | sed -e 's/^[^?]*?//' )
@@ -34,8 +35,7 @@ if [ "$file" = "./" ] ; then
 fi
 
 echo -n "[$(date)] " >/dev/stderr
-echo -n "GET " >/dev/stderr
-echo -n "$file $param ">/dev/stderr
+echo -n "$method $file $param " >/dev/stderr
 
 if [ -f "$file" -a $( echo $file | grep ".py" ) ] ; then
 	echo "200 OK" >/dev/stderr
