@@ -6,6 +6,7 @@ read -r request
 
 method=$(echo $request | awk '{ print $1 }' )
 request=$(echo $request | awk '{ print $2 }' | sed -e 's/\.\.//g')
+proto=$(echo $request | awk '{ print $3 }' )
 file=".$request"
 param=$(echo $file | sed -e 's/^[^?]*?//' )
 file=$(echo $file | sed -e 's/?.*$//' )
@@ -43,7 +44,7 @@ if [ -f "$file" -a $( echo $file | grep ".py" ) ] ; then
 	echo -n "Date: "
 	LC_ALL="en" date
 	echo "Server: $SERVER"
-	QUERY_STRING="$param" REQUEST_METHOD="GET" python "$file"
+	SERVER_PROTOCOL="$proto" QUERY_STRING="$param" REQUEST_METHOD="GET" python "$file"
 elif [ -f "$file" ] ; then
 	send_file "$file" "200 OK"
 elif [ -d "$file" ] ; then
