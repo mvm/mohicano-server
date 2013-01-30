@@ -44,7 +44,7 @@ if [ -f "$file" -a $( echo $file | grep ".py" ) ] ; then
 	echo -n "Date: "
 	LC_ALL="en" date
 	echo "Server: $SERVER"
-	SERVER_PROTOCOL="$proto" QUERY_STRING="$param" REQUEST_METHOD="GET" python "$file"
+	SERVER_PROTOCOL="$proto" REQUEST_METHOD="GET" QUERY_STRING="$param" REQUEST_METHOD="GET" python "$file"
 elif [ -f "$file" ] ; then
 	send_file "$file" "200 OK"
 elif [ -d "$file" ] ; then
